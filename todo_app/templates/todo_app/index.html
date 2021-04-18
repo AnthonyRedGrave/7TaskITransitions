@@ -1,0 +1,23 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}
+Главная
+{% endblock %}
+{% block scripts %}
+<script defer src="{% static 'todo_app/index.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="main_body">
+    <form>
+        {% csrf_token %}
+        <input class="new_todo_title" type="text" placeholder="Название заметки">
+        <input class="new_todo_input" type="text" placeholder="Текст заметки">
+        <input type="button" class="btn btn-primary new_todo" value="Добавить">
+    </form>
+
+    <div class="wrapper" id="wrapper">
+
+    </div>
+</div>
+{% endblock %}
