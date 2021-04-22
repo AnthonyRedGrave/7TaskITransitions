@@ -30,3 +30,7 @@ body{
     justify-content: space-between;
     border-radius: 3px;
 }
+
+.image_form{
+    display: flex;
+}

@@ -8,19 +8,37 @@ function builtToDo(){
         console.log(data)
         var list = data
         for (var i in list){
+        if (list[i].image !== null){
+            var item = `
+                    <div class="item" id="${list[i].id}" style="background: ${list[i].color}">
+                        <span title="${list[i].name}" data-image="${list[i].image}" onclick="moveUp(this)" class="item-text">${list[i].text}</span>
+                        <div class="icons" style="display: flex; justify-content: space-between; padding: 5px; max-width: 160px; width: 100%;">
+                            <div name="#008B8B"><i class="fa fa-circle" style="color:blue" onclick="update_color(this)" aria-hidden="true"></i></div>
+                            <div name="#FF1493"><i class="fa fa-circle" style="color:pink" onclick="update_color(this)" aria-hidden="true"></i></div>
+                            <div name='#ff9218'><i class="fa fa-circle" style="color:yellow" onclick="update_color(this)" aria-hidden="true"></i></div>
+                            <div><i data-bs-toggle="modal" onclick="change_modal(this)" data-bs-target="#exampleModal" class="fa fa-bars"></i></div>
+                            <div><i class="fa fa-hand-paper-o" title="Изменить заметку" onclick="update(this)" aria-hidden="true"></i></div>
+                            <div><i class="fa fa-window-close" title="Удалить заметку" onclick="delete_el(this)"  aria-hidden="true"></i></div>
+                        </div>
+                    </div>
+                `
+        }
+        else{
             var item = `
                 <div class="item" id="${list[i].id}" style="background: ${list[i].color}">
-                    <span title="${list[i].name}" onclick="moveUp(this)" class="text">${list[i].text}</span>
+                    <span title="${list[i].name}" onclick="moveUp(this)" class="item-text">${list[i].text}</span>
                     <div class="icons" style="display: flex; justify-content: space-between; padding: 5px; max-width: 160px; width: 100%;">
-                        <div name="Blue"><i class="fa fa-circle" style="color:blue" onclick="update_color(this)" aria-hidden="true"></i></div>
-                        <div name="Pink"><i class="fa fa-circle" style="color:pink" onclick="update_color(this)" aria-hidden="true"></i></div>
-                        <div name='Yellow'><i class="fa fa-circle" style="color:yellow" onclick="update_color(this)" aria-hidden="true"></i></div>
-                        <div><i class="fa fa-bars"></i></div>
+                        <div name="#008B8B"><i class="fa fa-circle" style="color:blue" onclick="update_color(this)" aria-hidden="true"></i></div>
+                        <div name="#FF1493"><i class="fa fa-circle" style="color:pink" onclick="update_color(this)" aria-hidden="true"></i></div>
+                        <div name='#ff9218'><i class="fa fa-circle" style="color:yellow" onclick="update_color(this)" aria-hidden="true"></i></div>
+                        <div><i data-bs-toggle="modal" onclick="change_modal(this)" data-bs-target="#exampleModal" class="fa fa-bars"></i></div>
                         <div><i class="fa fa-hand-paper-o" title="Изменить заметку" onclick="update(this)" aria-hidden="true"></i></div>
                         <div><i class="fa fa-window-close" title="Удалить заметку" onclick="delete_el(this)"  aria-hidden="true"></i></div>
                     </div>
                 </div>
             `
+        }
+
             wrapper_body.innerHTML += item
         }
     })
@@ -109,34 +127,16 @@ function update_color(el){
 }
 
 function update(el){
-    var id = el.parentNode.parentNode.id
-    activeItem = id
-    var url = `http://127.0.0.1:8000/api/todo/list/${id}/`
-    new_todo_title.value = el.parentNode.previousElementSibling.title
-    new_todo_input.value = el.parentNode.previousElementSibling.innerHTML
-    var data = {"name": new_todo_title.value, "text": new_todo_input.value}
+      var id = el.parentNode.parentNode.parentNode.id
+      activeItem = id
+      new_todo_title.value = el.parentNode.parentNode.previousElementSibling.title
+      new_todo_input.value = el.parentNode.parentNode.previousElementSibling.innerHTML
 
-//    $.ajax({
-//        type: 'PATCH',
-//        url: url,
-//        data: JSON.stringify(data),
-//        dataType: "json",
-//        headers: {
-//            'Content-type': 'application/json',
-//            'X-CSRFToken': csrf[0].value,
-//        },
-//        success: function (response) {
-//            builtToDo()
-//        },
-//        error: function (response) {
-//            console.log(response)
-//        }
-//    })
 
 }
 
 function delete_el(el){
-    var id = el.parentNode.parentNode.id
+    var id = el.parentNode.parentNode.parentNode.id
     var url = `http://127.0.0.1:8000/api/todo/list/${id}/`
     $.ajax({
         type: 'DELETE',
@@ -157,25 +157,81 @@ function delete_el(el){
 }
 
 function moveUp(el){
-    var prev = document.querySelector('.item')
-    prev.classList.remove('focused')
-    el.classList.add('focused')
-    run()
+      var prev_focused = document.querySelector('.focused')
+      if (prev_focused !== null){
+          prev_focused.classList.remove('focused')
+      }
+      el.classList.add('focused')
+      run()
 }
 
 
 function run () {
-  const items = document.querySelectorAll('.item')
+  const items = document.querySelectorAll('.item-text')
   const focused = [...items].find(i => i.classList.contains('focused'))
-  focused.parentNode.prepend(focused)
-//  const previous = focused.previousElementSibling
-//  console.log(previous)
-//  const next = focused.nextElementSibling
-//
-//  focused.classList.remove('focused')
-//  next.classList.add('focused')
-//  // добавляет в конец
-//  previous.parentNode.appendChild(previous)
-
+focused.parentNode.parentNode.prepend(focused.parentNode)
 
 }
+
+var modal_body = document.getElementById('modal-body')
+
+function change_modal(el){
+    var title_todo = el.parentNode.parentNode.previousElementSibling.title
+    var text_todo = el.parentNode.parentNode.previousElementSibling.innerHTML
+    var data_image = el.parentNode.parentNode.previousElementSibling.getAttribute('data-image')
+    var id_todo = el.parentNode.parentNode.parentNode.id
+    if (data_image !== null){
+        console.log('есть картинка')
+        modal_body.innerHTML = `<div class="h5 mb-3" data-id="${id_todo}">Заметка</div>
+            <div class="text-muted">
+                <ul>
+                    <li>Сложность: <b>${text_todo}</b></li>
+                    <li>Картинка к заметке:
+                     <image src="${data_image}" width="250" height="150" alt="К заметке не прикреплена картинка"></image></li>
+                </ul>
+            </div>
+            `
+    }
+    else{
+        console.log('нет картинки')
+        modal_body.innerHTML = `
+        <div class="h5 mb-3" data-id="${id_todo}">Заметка</div><div class="text-muted">
+                <ul>
+                    <li>Сложность: <b>${text_todo}</b></li>
+                    <li>Нет картинки</li>
+                </ul>
+            </div>
+            `
+    }
+        $("#exampleModalLabel").html(title_todo)
+}
+$("#id_ajax_upload_form").submit(function(e){
+    e.preventDefault();
+
+    var id = modal_body.firstElementChild.getAttribute("data-id")
+    var file = $("#image_to_upload")[0].files[0]
+    // this - форма для отправления из index.html
+    var formdata = new FormData(this)
+    formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+    formdata.append("image", file)
+    console.log(formdata)
+    var data = {"image": file}
+    var url_to_upload = `http://127.0.0.1:8000/api/todo/list/${id}/`
+    $.ajax({
+                type: 'PATCH',
+                    url: url_to_upload,
+                    data: JSON.stringify(formdata),
+                    processData: false,
+				    contentType: false,
+                    success: function (response) {
+                        console.log(response)
+                        builtToDo()
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+
+
+            })
+
+})

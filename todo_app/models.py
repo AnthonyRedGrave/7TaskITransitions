@@ -3,9 +3,9 @@ from django.db import models
 
 class ToDo(models.Model):
     COLOR_CHOICES = [
-        ('Blue', 'Голубой'),
-        ('Pink', 'Розовый'),
-        ('Yellow', 'Желтый'),
+        ('#008B8B', 'Голубой'),
+        ('#FF1493', 'Розовый'),
+        ('#ff9218', 'Желтый'),
         ('default', '#304B5F')
     ]
 
