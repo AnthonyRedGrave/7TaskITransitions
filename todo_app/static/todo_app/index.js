@@ -195,7 +195,8 @@ function change_modal(el){
     var form = $(".image_form")
     form[0].action = `upload_image/${id_todo}/`
     if (data_image !== null){
-        var correct_static = data_image.substr(45, 57) + data_image.substr(57)
+        var correct_static = data_image.substr(45, 57)
+        console.log(correct_static)
         modal_body.innerHTML = `<div class="h5 mb-3" data-id="${id_todo}">Заметка</div>
             <div class="text-muted">
                 <ul>
