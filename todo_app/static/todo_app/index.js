@@ -200,7 +200,7 @@ function change_modal(el){
                 <ul>
                     <li>Текст заметки: <b>${text_todo}</b></li>
                     <li>
-                     <image src="${data_image}" width="250" height="150" alt="К заметке не прикреплена картинка"></image></li>
+                     <image src="{% static ${data_image} %}" width="250" height="150" alt="К заметке не прикреплена картинка"></image></li>
                 </ul>
             </div>
             `
