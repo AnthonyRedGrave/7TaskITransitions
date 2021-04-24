@@ -195,14 +195,14 @@ function change_modal(el){
     var form = $(".image_form")
     form[0].action = `upload_image/${id_todo}/`
     if (data_image !== null){
-        var correct_static = data_image.substr(45, 57)
+        var correct_static = data_image.substr(45)
         console.log(correct_static)
         modal_body.innerHTML = `<div class="h5 mb-3" data-id="${id_todo}">Заметка</div>
             <div class="text-muted">
                 <ul>
                     <li>Текст заметки: <b>${text_todo}</b></li>
                     <li>
-                     <image src="{% static "${correct_static}" %}" width="250" height="150" alt="К заметке не прикреплена картинка"></image></li>
+                     <image src="{% static '${correct_static}' %}" width="250" height="150" alt="К заметке не прикреплена картинка"></image></li>
                 </ul>
             </div>
             `
