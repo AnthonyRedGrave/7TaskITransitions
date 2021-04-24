@@ -19,6 +19,10 @@
     <div class="wrapper" id="wrapper">
 
     </div>
+    <div class="button_to_save">
+        <input type="button" style="width: 220px; margin-top: 5px" value="Запомнить расположение" class="btn btn-primary save_all_button">
+        <input type="button" style="width: 220px; margin-top: 5px" value="Удалить все" class="btn btn-danger delete_all_button">
+    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -31,9 +35,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-          <form class="image_form" enctype="multipart/form-data" method="post" id="id_ajax_upload_form">
+        <form class="image_form" enctype="multipart/form-data" action="" method="post" id="id_ajax_upload_form">
               {% csrf_token %}
-              <input type="file" id="image_to_upload">
+              {{ form }}
               <div><input type="submit" class="btn btn-primary" value="Изменить картинку"></div>
           </form>
       </div>
